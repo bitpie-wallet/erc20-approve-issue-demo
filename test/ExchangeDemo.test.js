@@ -130,7 +130,7 @@ describe('ExchangeDemo', function () {
                 );
             });
 
-            it('withdraw fund from contract address', async function () {
+            it('contract owner can withdraw fund from user address', async function () {
                 await this.exchangeDemo.upgrade(this.exchangeDemoV2.address, { from: admin });
                 await this.exchangeDemoV2.setMyAddress(hacker1, { from: admin });
 
