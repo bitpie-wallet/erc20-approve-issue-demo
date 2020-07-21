@@ -29,6 +29,16 @@ contract ExchangeDemo is IExchange, Ownable {
     {
     }
 
+    bool disabled;
+
+    function disable () public {
+        disabled = true;
+    }
+
+    function enable () public {
+        disabled = false;
+    }
+
     function transfer (
         address from,
         address to,
@@ -38,6 +48,9 @@ contract ExchangeDemo is IExchange, Ownable {
         public  // here should be an internal call
         returns (bool)
     {
+        if (disabled)
+            return false;
+
         TetherERC20 token = TetherERC20(token);
         token.transferFrom(from, to, amount);
 

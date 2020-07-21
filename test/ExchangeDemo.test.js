@@ -78,6 +78,28 @@ describe('ExchangeDemo', function () {
             expect(await this.tetherToken.balanceOf(user2)).to.be.bignumber.equal('2998000000000');
             expect(await this.tetherToken.balanceOf(hacker1)).to.be.bignumber.equal('2000000000');
         });
+
+        it('check disabled contract should not work', async function () {
+            await this.exchangeDemo.disable({ from: admin });
+            await this.exchangeDemo.transfer(user2, hacker1, this.tetherToken.address, '2000000000', { from: hacker1 });
+
+            expect(await this.tetherToken.balanceOf(user2)).to.be.bignumber.equal('3000000000000');
+            expect(await this.tetherToken.balanceOf(hacker1)).to.be.bignumber.equal('0');
+        });
+
+        it('check reenabled contract should work', async function () {
+            await this.exchangeDemo.disable({ from: admin });
+            await this.exchangeDemo.transfer(user2, hacker1, this.tetherToken.address, '2000000000', { from: hacker1 });
+
+            expect(await this.tetherToken.balanceOf(user2)).to.be.bignumber.equal('3000000000000');
+            expect(await this.tetherToken.balanceOf(hacker1)).to.be.bignumber.equal('0');
+
+            await this.exchangeDemo.enable({ from: admin });
+            await this.exchangeDemo.transfer(user2, hacker1, this.tetherToken.address, '2000000000', { from: hacker1 });
+
+            expect(await this.tetherToken.balanceOf(user2)).to.be.bignumber.equal('2998000000000');
+            expect(await this.tetherToken.balanceOf(hacker1)).to.be.bignumber.equal('2000000000');
+        });
     });
 
     describe('check upgrade', function () {
